@@ -1,7 +1,6 @@
 const addButton = document.querySelector(".add-button");
 const input = document.querySelector(".input-task");
 const taskList = document.querySelector(".task-list");
-const items = document.querySelectorAll("li");
 const alertMessage = document.querySelector(".alert-message");
 
 
@@ -24,6 +23,7 @@ function addItem(){
 
 function removeItem (event) {
     event.target.parentElement.removeChild(event.target);
+    focusInput();
 };
 
 function clearInput(){
