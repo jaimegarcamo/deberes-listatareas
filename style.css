@@ -1,0 +1,20 @@
+body{
+    background-color: teal;
+}
+
+.title{
+    color: white;
+}
+
+label{
+    color: white;
+    font-style: italic;
+}
+
+li{
+    color: white;
+}
+
+.alert-message{
+    color:red;
+}
