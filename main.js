@@ -1,4 +1,5 @@
-const addButton = document.querySelector(".add-button");
+//const addButton = document.querySelector(".add-button");
+const form = document.querySelector(".form");
 const input = document.querySelector(".input-task");
 const taskList = document.querySelector(".task-list");
 const alertMessage = document.querySelector(".alert-message");
@@ -65,21 +66,14 @@ function localStorageInit(){
     let tasksMemoryArray = [];
 
     if(tasksMemory){
-
         tasksMemoryArray = tasksMemory.split(',');
-        
+
         tasksMemoryArray.forEach(element => {
-
             const item = document.createElement("li");
-
             item.innerText = element;
-
             taskList.append(item);
-
             focusInput();
-
             titleTask.innerText = 'Task List';
-
         });
     }
     else{
@@ -97,19 +91,26 @@ input.addEventListener("input", () => {
     alertMessage.innerText = '';
 })
 
-addButton.addEventListener("click", (event) => {
-    addItem();
-    event.preventDefault();
-    saveInfoArray();
-});
+// addButton.addEventListener("click", (event) => {
+//     addItem();
+//     event.preventDefault();
+//     saveInfoArray();
+// });
 
-addButton.addEventListener("keypress", (event) => {
-    if(event === "Enter"){
-        addItem();
-        event.preventDefault();
-        saveInfoArray();   
-    }
-});
+// addButton.addEventListener("keypress", (event) => {
+//     if(event === "Enter"){
+//         addItem();
+//         event.preventDefault();
+//         saveInfoArray();   
+//     }
+// });
+
+form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    addItem();
+    saveInfoArray();
+})
+
 
 taskList.addEventListener("click", (event) => {
     removeItem(event);
