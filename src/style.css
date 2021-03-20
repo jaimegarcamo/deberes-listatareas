@@ -22,3 +22,9 @@ li{
 .alert-message{
     color:red;
 }
+
+.incomplete-tasks{
+    color:coral;
+    font-size: 30px;
+    font-weight: 300;
+}
