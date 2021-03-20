@@ -2,6 +2,7 @@ const addButton = document.querySelector(".add-button");
 const input = document.querySelector(".input-task");
 const taskList = document.querySelector(".task-list");
 const alertMessage = document.querySelector(".alert-message");
+const titleTask = document.querySelector(".title-task");
 
 
 
@@ -14,11 +15,13 @@ function addItem(){
     
     if(input.value !== ''){
         taskList.append(item);
+        titleTask.innerText = 'Task List';
         clearInput();
     }
     else{
         alertMessage.innerText = "You can't add an empty task!";
     }
+
 
     focusInput();
 };
@@ -52,14 +55,44 @@ function saveInLocalStorage(arrayItems){
     //Si borramos el ultimo elemento que quedaba, limpiamos el localStorage
     if(localStorage.getItem('tasks').length === 0){
         localStorage.clear();
+        focusInput();
+        titleTask.innerText = 'Your List Is Empty 😔';
     }
 };
 
+function localStorageInit(){
+    let tasksMemory = localStorage.getItem('tasks');
+    let tasksMemoryArray = [];
+
+    if(tasksMemory){
+
+        tasksMemoryArray = tasksMemory.split(',');
+        
+        tasksMemoryArray.forEach(element => {
+
+            const item = document.createElement("li");
+
+            item.innerText = element;
+
+            taskList.append(item);
+
+            focusInput();
+
+            titleTask.innerText = 'Task List';
+
+        });
+    }
+    else{
+        titleTask.innerText = 'Your List Is Empty 😔';
+    };
+}
 
 
 
 
 //EVENTS
+localStorageInit();
+
 input.addEventListener("input", () => {
     alertMessage.innerText = '';
 })
