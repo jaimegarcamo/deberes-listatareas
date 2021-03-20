@@ -5,6 +5,8 @@ const alertMessage = document.querySelector(".alert-message");
 
 
 
+
+
 //FUNCTIONS
 function addItem(){
     const item = document.createElement("li");
@@ -34,6 +36,28 @@ function focusInput(){
     input.focus();
 };
 
+function saveInfoArray(){
+    let arrayItems = [];
+    let items = document.querySelectorAll("li");
+
+    items.forEach(item => {
+        arrayItems.push(item.innerText)
+    });
+
+    saveInLocalStorage(arrayItems)
+};
+
+function saveInLocalStorage(arrayItems){
+    localStorage.setItem('tasks', arrayItems);
+    //Si borramos el ultimo elemento que quedaba, limpiamos el localStorage
+    if(localStorage.getItem('tasks').length === 0){
+        localStorage.clear();
+    }
+};
+
+
+
+
 
 //EVENTS
 input.addEventListener("input", () => {
@@ -42,15 +66,22 @@ input.addEventListener("input", () => {
 
 addButton.addEventListener("click", (event) => {
     addItem();
-    event.preventDefault()
+    event.preventDefault();
+    saveInfoArray();
 });
 
 addButton.addEventListener("keypress", (event) => {
     if(event === "Enter"){
         addItem();
-        event.preventDefault()    
+        event.preventDefault();
+        saveInfoArray();   
     }
 });
 
-taskList.addEventListener("click", removeItem);
+taskList.addEventListener("click", (event) => {
+    removeItem(event);
+    saveInfoArray();
+});
+
+
 
