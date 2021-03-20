@@ -4,7 +4,7 @@ const input = document.querySelector(".input-task");
 const taskList = document.querySelector(".task-list");
 const alertMessage = document.querySelector(".alert-message");
 const titleTask = document.querySelector(".title-task");
-
+const incompleteTasks = document.querySelector(".incomplete-tasks");
 
 
 
@@ -23,22 +23,25 @@ function addItem(){
         alertMessage.innerText = "You can't add an empty task!";
     }
 
-
     focusInput();
 };
+
 
 function removeItem (event) {
     event.target.parentElement.removeChild(event.target);
     focusInput();
 };
 
+
 function clearInput(){
     input.value = "";
 };
 
+
 function focusInput(){
     input.focus();
 };
+
 
 function saveInfoArray(){
     let arrayItems = [];
@@ -51,6 +54,7 @@ function saveInfoArray(){
     saveInLocalStorage(arrayItems)
 };
 
+
 function saveInLocalStorage(arrayItems){
     localStorage.setItem('tasks', arrayItems);
     //Si borramos el ultimo elemento que quedaba, limpiamos el localStorage
@@ -60,6 +64,7 @@ function saveInLocalStorage(arrayItems){
         titleTask.innerText = 'Your List Is Empty 😔';
     }
 };
+
 
 function localStorageInit(){
     let tasksMemory = localStorage.getItem('tasks');
@@ -79,7 +84,23 @@ function localStorageInit(){
     else{
         titleTask.innerText = 'Your List Is Empty 😔';
     };
-}
+    incompleteTasksNumber();
+};
+
+
+function incompleteTasksNumber(){
+    let tasksMemory = localStorage.getItem('tasks');
+    let tasksMemoryArray = [];
+
+    if (tasksMemory){
+        tasksMemoryArray = tasksMemory.split(',');
+        incompleteTasks.innerText = tasksMemoryArray.length;
+    }
+    else{
+        incompleteTasks.innerText = 0;
+    }
+
+};
 
 
 
@@ -89,7 +110,7 @@ localStorageInit();
 
 input.addEventListener("input", () => {
     alertMessage.innerText = '';
-})
+});
 
 // addButton.addEventListener("click", (event) => {
 //     addItem();
@@ -109,12 +130,14 @@ form.addEventListener("submit", (event) => {
     event.preventDefault();
     addItem();
     saveInfoArray();
-})
+    incompleteTasksNumber();
+});
 
 
 taskList.addEventListener("click", (event) => {
     removeItem(event);
     saveInfoArray();
+    incompleteTasksNumber();
 });
 
 
