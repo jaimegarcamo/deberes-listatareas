@@ -8,8 +8,23 @@ const incompleteTasks = document.querySelector(".incomplete-tasks");
 
 
 
-
+//----------
 //FUNCTIONS
+//-----------
+
+//La llamamos cuando queremos saber las tareas actuales que tenemos activas
+function getActiveTasks(){
+    let tasksMemory = localStorage.getItem('tasks');
+
+    if(tasksMemory){
+        return tasksMemory.split(',');
+    }
+    else{
+        return [];
+    }
+};
+
+//La llamamos cada vez que queremos añadir una tarea nueva
 function addItem(){
     const item = document.createElement("li");
     item.innerText = input.value;
@@ -26,23 +41,23 @@ function addItem(){
     focusInput();
 };
 
-
+// La llamamos cada vez que queremos borrar una tarea de la lista
 function removeItem (event) {
     event.target.parentElement.removeChild(event.target);
     focusInput();
 };
 
-
+//La llamamos cuando queremos limpiar el input
 function clearInput(){
     input.value = "";
 };
 
-
+//La llamamos cuando queremos poner el foco en el input
 function focusInput(){
     input.focus();
 };
 
-
+//La llamamos tras añadir o borrar una tarea, para actualizar el array que guardaremos en localstorage
 function saveInfoArray(){
     let arrayItems = [];
     let items = document.querySelectorAll("li");
@@ -54,7 +69,7 @@ function saveInfoArray(){
     saveInLocalStorage(arrayItems)
 };
 
-
+//La llamamos para guardar el nuevo array con las tareas actualizadas en LocalStorage
 function saveInLocalStorage(arrayItems){
     localStorage.setItem('tasks', arrayItems);
     //Si borramos el ultimo elemento que quedaba, limpiamos el localStorage
@@ -65,15 +80,11 @@ function saveInLocalStorage(arrayItems){
     }
 };
 
+//La llamamos al principio para imprimir en pantalla las tareas de localstorage
+function localStorageInit(tasks){
 
-function localStorageInit(){
-    let tasksMemory = localStorage.getItem('tasks');
-    let tasksMemoryArray = [];
-
-    if(tasksMemory){
-        tasksMemoryArray = tasksMemory.split(',');
-
-        tasksMemoryArray.forEach(element => {
+    if(tasks.length){
+        tasks.forEach(element => {
             const item = document.createElement("li");
             item.innerText = element;
             taskList.append(item);
@@ -84,11 +95,10 @@ function localStorageInit(){
     else{
         titleTask.innerText = 'Your List Is Empty 😔';
     };
-    incompleteTasksNumber();
 };
 
-
-function incompleteTasksNumber(){
+//La llamamos para obtener el número de tareas pendientes que nos quedan
+function pendingTasksNumber(){
     let tasksMemory = localStorage.getItem('tasks');
     let tasksMemoryArray = [];
 
@@ -105,9 +115,21 @@ function incompleteTasksNumber(){
 
 
 
-//EVENTS
-localStorageInit();
 
+//-------
+//EVENTS
+//-------
+
+//Cada vez que llamemos a la variable tasks, se ejecutará la función getActiveTasks y obtendremos la lista actualizada de tareas actuales
+let tasks = getActiveTasks();
+
+//Al principio ejecutamos esto con la lista de tareas, para imprimir las tareas actuales que hay en localstorage
+localStorageInit(tasks);
+
+//Al principio ejecutamos esto para obtener el numero actual de tareas pendientes
+pendingTasksNumber();
+
+//Cuando escribimos algo en el input se borra el mensaje de error de tarea vacia
 input.addEventListener("input", () => {
     alertMessage.innerText = '';
 });
@@ -126,18 +148,22 @@ input.addEventListener("input", () => {
 //     }
 // });
 
+
+//Cuando le damos al submit (boton Add) ya sea por click o enter, hacemos el preventDefault
+//para que el form no actualice la pagina y añadimos la nueva tarea, la guardamos en el array y actualizamos el contador
 form.addEventListener("submit", (event) => {
     event.preventDefault();
     addItem();
     saveInfoArray();
-    incompleteTasksNumber();
+    pendingTasksNumber();
 });
 
-
+//Cada vez que clicamos en la lista (ul) para borrar una tarea, mandamos el event (el elemento de dentro de la lista)
+//a la funcion de borrar tarea, actualizamos el array de tareas y actualizamos el contador de tareas pendientes
 taskList.addEventListener("click", (event) => {
     removeItem(event);
     saveInfoArray();
-    incompleteTasksNumber();
+    pendingTasksNumber();
 });
 
 
